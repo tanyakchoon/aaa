@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[[#{home.index.headline}]]</title>
+    <title>Superhero Grid</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .section-container {
+            max-width: 100%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-heading {
+            color: black;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-gap: 10px;
+            padding: 20px;
+        }
+
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            /* Default color */
+        }
+
+        .danger {
+            background-color: #ff5555;
+        }
+
+        .warning {
+            background-color: #ffcc00;
+        }
+
+        .success {
+            background-color: #66cc66;
+        }
+
+        .referenceArchitectureLabel {
+            text-align: center;
+            text-decoration: none;
+            font-size: 12px;
+            color: #000;
+            text-transform: uppercase;
+        }
+    </style>
+
+    <script>
+
+            function showAllSections() {
+                event.preventDefault();
+
+                console.log("ALL");
+                // Show all sections
+                document.querySelectorAll('div.section-container').forEach(div => {
+                    div.style.display = 'block';
+                });
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+
+                // Add 'active' class to the clicked nav link
+                event.target.classList.add('active');
+            }
+
+            function showSection(event, sectionId) {
+                event.preventDefault();
+                // Hide all sections
+                console.log(sectionId);
+                document.querySelectorAll('div.section-container').forEach(div => {
+                    div.style.display = 'none';
+                });
+                // Show the clicked section
+                document.getElementById(sectionId).style.display = 'block'
+
+                // Remove 'active' class from all nav links
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                // Add 'active' class to the clicked nav link
+                event.target.classList.add('active');
+            }
+        </script>
+</head>
+
+<body>
+<div layout:fragment="content" class="content" style="color: white;">
+
+    <main class="my-5">
+        <div class="container">
+            <ul class="nav nav-pills">
+
+                <li class="nav-item">
+                    <a class="nav-link active" onclick="showAllSections()">All</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection(event, 'capabilityOverview')">Capabilities</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="showSection(event, 'infrastructureOverview')">Infrastructure</a>
+                </li>
+
+            </ul>
+            <div class="content" style="color: white;">
+                <div class="section-container" id="capabilityOverview">
+                    <div class="section" >
+                        <h2 class="section-heading">Functional Capabilities</h2>
+                        <div class="grid-container" >
+                            <div th:each="capability : ${dashboardOverview.capabilities}" class="box"
+                                 th:class="'box ' + ${capability.referenceArchitectureStatusIndicator}">
+                                <!-- <span class="referenceArchitectureLabel" th:text="${capability.name}"></span> -->
+
+                                <a th:href="@{/capabilities/view/{id}(id=${capability.id})}"
+                                   class="referenceArchitectureLabel" th:text="${capability.name}"></a>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-container" id="infrastructureOverview">
+                    <div class="section" >
+                        <h2 class="section-heading">Infrastructure Components</h2>
+                        <div class="grid-container" >
+                            <div th:each="infrastructure : ${dashboardOverview.infrastructure}" class="box"
+                                 th:class="'box ' + ${infrastructure.referenceArchitectureStatusIndicator}">
+
+                                <a th:href="@{/infrastructureComponents/view/{id}(id=${infrastructure.id})}"
+                                   class="referenceArchitectureLabel" th:text="${infrastructure.component}"></a>
+
+                                <!-- <span class="referenceArchitectureLabel" th:text="${infrastructure.component}"></span> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </main>
+</div>
+
+</body>
+
+</html>
