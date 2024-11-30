@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dynamic Dropdown and Checkboxes</title>
+    <script>
+        function updateCheckboxes() {
+            const selectedValue = document.getElementById("dropdown").value;
+
+            // Hide all checkbox containers
+            document.querySelectorAll(".checkbox-container").forEach(container => {
+                container.style.display = "none";
+            });
+
+            // Show the checkbox container for the selected value
+            const containerToShow = document.getElementById("checkbox-container-" + selectedValue);
+            if (containerToShow) {
+                containerToShow.style.display = "grid";
+            }
+        }
+    </script>
+    <style>
+        .checkbox-container {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        .checkbox-item {
+            display: inline-block;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dynamic Dropdown and Checkboxes</h1>
+    <form method="post" action="/submit">
+        <label for="dropdown">Select an option:</label>
+        <select id="dropdown" name="dropdown" onchange="updateCheckboxes()">
+            <option value="" selected disabled>Select an option</option>
+            <option th:each="item : ${dropdownOptions}" th:value="${item.value}" th:text="${item.label}"></option>
+        </select>
+
+        <div th:each="option : ${dropdownOptions}">
+            <div th:id="'checkbox-container-' + ${option.value}" class="checkbox-container">
+                <div th:each="checkbox : ${option.checkboxes}" class="checkbox-item">
+                    <input th:id="'checkbox-' + ${checkbox.id}" 
+                           th:name="'checkbox-' + ${checkbox.id}" 
+                           th:value="${checkbox.value}" 
+                           type="checkbox">
+                    <label th:for="'checkbox-' + ${checkbox.id}" th:text="${checkbox.label}"></label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
