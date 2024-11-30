@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dropdown with Conditional Textbox</title>
+    <style>
+        /* Style for aligning the dropdown and textbox side-by-side */
+        .form-group {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between dropdown and textbox */
+        }
+        #conditionalTextbox {
+            display: none; /* Hidden by default */
+        }
+    </style>
+    <script>
+        function toggleTextbox(dropdown) {
+            const textbox = document.getElementById('conditionalTextbox');
+            if (dropdown.value === "NO") {
+                textbox.style.display = 'inline-block'; // Show the textbox next to the dropdown
+            } else {
+                textbox.style.display = 'none'; // Hide the textbox
+            }
+        }
+    </script>
+</head>
+<body>
+    <form action="#" method="post">
+        <div class="form-group">
+            <label for="dropdown">Choose an option:</label>
+            <select id="dropdown" name="dropdown" onchange="toggleTextbox(this)">
+                <option value="YES">YES</option>
+                <option value="NO">NO</option>
+            </select>
+            
+            <!-- Conditional textbox, initially hidden -->
+            <input type="text" id="conditionalTextbox" name="textbox" placeholder="Type here...">
+        </div>
+        
+        <button type="submit" style="margin-top: 10px;">Submit</button>
+    </form>
+</body>
+</html>
